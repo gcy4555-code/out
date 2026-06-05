@@ -1,0 +1,609 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .site-wrap {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #fafaf7;
+    min-height: 100vh;
+    color: #1a1a1a;
+  }
+
+  .hero {
+    background: #1c2b1e;
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(255,255,255,0.015) 40px,
+      rgba(255,255,255,0.015) 41px
+    );
+  }
+  .hero-badge {
+    display: inline-block;
+    background: #4a7c59;
+    color: #d4edda;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+  .hero h1 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #f5f0e8;
+    line-height: 1.25;
+    margin-bottom: 0.75rem;
+    position: relative;
+  }
+  .hero h1 span { color: #8ecba0; }
+  .hero p {
+    color: #a0b8a5;
+    font-size: 0.95rem;
+    font-weight: 300;
+    letter-spacing: 0.03em;
+    position: relative;
+  }
+
+  .mood-bar {
+    display: flex;
+    gap: 8px;
+    padding: 1.25rem 1.5rem;
+    background: #fff;
+    border-bottom: 0.5px solid #e8e4de;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .mood-bar::-webkit-scrollbar { display: none; }
+  .mood-btn {
+    flex-shrink: 0;
+    border: 0.5px solid #d8d4ce;
+    background: #fafaf7;
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    color: #555;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .mood-btn:hover { background: #f0ece4; border-color: #bbb; }
+  .mood-btn.active {
+    background: #1c2b1e;
+    color: #f5f0e8;
+    border-color: #1c2b1e;
+  }
+
+  .region-tabs {
+    display: flex;
+    gap: 0;
+    padding: 1rem 1.5rem 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .region-tabs::-webkit-scrollbar { display: none; }
+  .region-tab {
+    flex-shrink: 0;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: #888;
+    font-weight: 400;
+    transition: all 0.15s;
+  }
+  .region-tab:hover { color: #333; }
+  .region-tab.active {
+    color: #1c2b1e;
+    border-bottom-color: #4a7c59;
+    font-weight: 500;
+  }
+
+  .content-area {
+    padding: 1.5rem;
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: #999;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .place-card {
+    background: #fff;
+    border: 0.5px solid #e8e4de;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .place-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  }
+
+  .card-thumb {
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.8rem;
+    position: relative;
+  }
+  .card-category-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  .card-body { padding: 14px 16px; }
+  .card-name {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: #1a1a1a;
+  }
+  .card-loc {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 8px;
+  }
+  .card-desc {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .tag {
+    font-size: 11px;
+    padding: 2px 9px;
+    border-radius: 20px;
+    border: 0.5px solid #ddd;
+    color: #666;
+    background: #f7f5f2;
+  }
+
+  .tip-box {
+    background: #f0f7f2;
+    border: 0.5px solid #b8d8c4;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 2rem;
+    font-size: 13px;
+    color: #2d5a3d;
+    line-height: 1.7;
+  }
+  .tip-box strong { font-weight: 500; display: block; margin-bottom: 4px; }
+
+  .detail-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10,20,12,0.85);
+    z-index: 10;
+    display: none;
+    align-items: flex-end;
+    padding: 1.5rem;
+  }
+  .detail-overlay.open { display: flex; }
+  .detail-panel {
+    background: #fafaf7;
+    border-radius: 16px;
+    padding: 1.5rem;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .detail-close {
+    float: right;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #888;
+    font-family: sans-serif;
+    line-height: 1;
+  }
+  .detail-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    padding-right: 2rem;
+  }
+  .detail-sub { font-size: 13px; color: #888; margin-bottom: 1rem; }
+  .detail-section { margin-top: 1rem; }
+  .detail-section h4 { font-size: 12px; letter-spacing: 0.1em; color: #aaa; margin-bottom: 8px; font-weight: 500; }
+  .detail-info-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 8px; font-size: 14px; color: #333; line-height: 1.6; }
+  .detail-info-row i { margin-top: 2px; flex-shrink: 0; color: #4a7c59; }
+  .detail-recs { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .rec-item { background: #f5f2ed; border-radius: 8px; padding: 10px 14px; }
+  .rec-item strong { font-size: 13px; display: block; font-weight: 500; margin-bottom: 2px; }
+  .rec-item span { font-size: 12px; color: #666; }
+
+  .bottom-nav {
+    position: sticky;
+    bottom: 0;
+    background: #fff;
+    border-top: 0.5px solid #e8e4de;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 6px;
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    font-size: 11px;
+    color: #aaa;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: 'Noto Sans KR', sans-serif;
+    padding: 0 12px;
+    transition: color 0.15s;
+  }
+  .nav-item.active { color: #1c2b1e; }
+  .nav-item i { font-size: 20px; }
+</style>
+
+<div class="site-wrap" id="app">
+
+  <div class="hero">
+    <div class="hero-badge">BURNOUT ESCAPE</div>
+    <h1>지금 당장<br><span>탈출이 필요해</span></h1>
+    <p>번아웃을 날려버릴 국내 명소 큐레이션</p>
+  </div>
+
+  <div class="mood-bar">
+    <button class="mood-btn active" onclick="filterMood('all')">✨ 전체</button>
+    <button class="mood-btn" onclick="filterMood('맛집')">🍽 맛집</button>
+    <button class="mood-btn" onclick="filterMood('자연')">🌿 자연치유</button>
+    <button class="mood-btn" onclick="filterMood('카페')">☕ 감성카페</button>
+    <button class="mood-btn" onclick="filterMood('문화')">🎨 문화예술</button>
+    <button class="mood-btn" onclick="filterMood('야경')">🌙 야경명소</button>
+  </div>
+
+  <div class="region-tabs" id="regionTabs">
+    <button class="region-tab active" onclick="filterRegion('전체')">전체</button>
+    <button class="region-tab" onclick="filterRegion('서울')">서울</button>
+    <button class="region-tab" onclick="filterRegion('부산')">부산</button>
+    <button class="region-tab" onclick="filterRegion('제주')">제주</button>
+    <button class="region-tab" onclick="filterRegion('강원')">강원</button>
+    <button class="region-tab" onclick="filterRegion('경주')">경주</button>
+    <button class="region-tab" onclick="filterRegion('전주')">전주</button>
+    <button class="region-tab" onclick="filterRegion('여수')">여수</button>
+  </div>
+
+  <div class="content-area">
+    <div class="tip-box" id="tipBox">
+      <strong>💡 오늘의 탈출 팁</strong>
+      번아웃이 왔을 때 가장 좋은 처방은 "새로운 풍경"이에요. 익숙한 공간을 벗어나 낯선 맛과 장소를 만나면 뇌가 리셋됩니다. 지금 바로 어디든 떠나보세요.
+    </div>
+    <div class="section-label" id="sectionLabel">전체 추천 명소</div>
+    <div class="cards-grid" id="cardsGrid"></div>
+  </div>
+
+  <div class="bottom-nav">
+    <button class="nav-item active"><i class="ti ti-map-2" aria-hidden="true"></i>탐색</button>
+    <button class="nav-item" onclick="sendPrompt('번아웃 해결을 위한 1박 2일 국내 여행 코스 추천해줘')"><i class="ti ti-route" aria-hidden="true"></i>코스 ↗</button>
+    <button class="nav-item" onclick="sendPrompt('지금 계절에 가기 좋은 국내 명소 추천해줘')"><i class="ti ti-sparkles" aria-hidden="true"></i>추천받기 ↗</button>
+    <button class="nav-item" onclick="sendPrompt('혼자 여행하기 좋은 국내 도시 추천해줘')"><i class="ti ti-user" aria-hidden="true"></i>혼여 ↗</button>
+  </div>
+
+  <div class="detail-overlay" id="detailOverlay" onclick="closeDetail(event)">
+    <div class="detail-panel" id="detailPanel"></div>
+  </div>
+</div>
+
+<script>
+const PLACES = [
+  {
+    id:1, region:'서울', category:'문화', emoji:'🏛', bg:'#eef2f7',
+    tagColor:'#c5d8f0', tagText:'#1a4a7a',
+    name:'국립현대미술관 서울관',
+    loc:'서울 종로구 삼청로',
+    desc:'경복궁 옆 도심 속 힐링 공간. 현대미술을 감상하며 복잡한 머리를 비워낼 수 있어요.',
+    tags:['미술관','무료입장','도보여행'],
+    detail: {
+      why:'예술 감상은 과부하된 뇌를 전환하는 최고의 방법. 생각 없이 작품만 바라보는 시간이 필요할 때.',
+      tip:'수요일 야간개장(18~21시) 무료. 경복궁과 연계해 하루 코스로 최적.',
+      recs:[
+        {name:'삼청동 한식집 "온지음"', desc:'전통 한식 코스. 예약 필수. 1인 4~6만원대'},
+        {name:'카페 성북동', desc:'고즈넉한 한옥 카페. 경관이 좋아 사진 명소'},
+        {name:'북촌한옥마을', desc:'걸어서 10분. 오전 일찍 방문 추천'},
+      ]
+    }
+  },
+  {
+    id:2, region:'서울', category:'카페', emoji:'☕', bg:'#f5f0e8',
+    tagColor:'#e8d8b0', tagText:'#5a3e00',
+    name:'성수동 카페 거리',
+    loc:'서울 성동구 성수동',
+    desc:'공장을 개조한 힙한 카페들이 즐비한 서울 핫플. 걸으면서 구경하는 재미가 쏠쏠해요.',
+    tags:['감성카페','브런치','도보투어','사진명소'],
+    detail: {
+      why:'번아웃엔 낯선 분위기가 약. 성수의 독특한 공간감이 일상을 리셋시켜 줘요.',
+      tip:'주말 오전 11시 전 방문하면 한산. 카페마다 특색 있어 3~4곳 돌아보는 것 추천.',
+      recs:[
+        {name:'어니언 성수', desc:'창고 개조 대형 카페. 베이커리 유명'},
+        {name:'카페 할아버지공장', desc:'40년 된 공장 재탄생. 인스타 성지'},
+        {name:'서울숲 피크닉', desc:'카페 후 서울숲 30분 산책 코스'},
+      ]
+    }
+  },
+  {
+    id:3, region:'부산', category:'야경', emoji:'🌉', bg:'#edf4f0',
+    tagColor:'#b8dcc8', tagText:'#0f3d25',
+    name:'감천문화마을',
+    loc:'부산 사하구 감천동',
+    desc:'알록달록 계단식 마을. 골목을 걷다 보면 어느새 생각이 비워지는 마법 같은 공간.',
+    tags:['야경','사진명소','도보투어','골목여행'],
+    detail: {
+      why:'색색의 집들이 빼곡한 골목길은 현실에서 잠시 이탈한 느낌을 줘요. 길을 잃어도 괜찮은 곳.',
+      tip:'오후 4~6시 방문 시 빛이 예쁘게 떨어짐. 경사가 있으니 편한 신발 필수.',
+      recs:[
+        {name:'마을 내 어묵 골목', desc:'갓 만든 어묵 시식. 개당 500~1000원'},
+        {name:'송도 해수욕장', desc:'차로 20분. 일몰 명소'},
+        {name:'자갈치 시장', desc:'신선한 회와 해산물. 저녁 추천'},
+      ]
+    }
+  },
+  {
+    id:4, region:'부산', category:'맛집', emoji:'🦀', bg:'#fdf0ea',
+    tagColor:'#f5c4a8', tagText:'#6b2000',
+    name:'기장 대변항 횟집 거리',
+    loc:'부산 기장군 기장읍',
+    desc:'동해바다 바로 앞에서 먹는 싱싱한 회. 파도소리 들으며 먹는 점심이 번아웃을 치유해요.',
+    tags:['맛집','해산물','바다뷰','드라이브'],
+    detail: {
+      why:'바다를 바라보며 먹는 음식은 스트레스 해소에 탁월. 탁 트인 시야가 답답한 마음을 풀어줘요.',
+      tip:'점심 11~13시가 가장 신선. 멍게, 성게, 기장미역 꼭 추가주문.',
+      recs:[
+        {name:'기장 멸치 쌈밥', desc:'기장 특산 멸치로 만든 향토 음식'},
+        {name:'일광해수욕장', desc:'조용한 해변. 식후 산책 코스'},
+        {name:'연화리 카페', desc:'해안절경 뷰 카페 다수. 드라이브 코스'},
+      ]
+    }
+  },
+  {
+    id:5, region:'제주', category:'자연', emoji:'🌊', bg:'#e8f4fc',
+    tagColor:'#a8d4f0', tagText:'#073a5c',
+    name:'협재 해수욕장',
+    loc:'제주 제주시 한림읍',
+    desc:'에메랄드빛 바다와 새하얀 모래사장. 제주에서도 가장 아름다운 해변 중 하나예요.',
+    tags:['자연','해변','스노클링','일몰'],
+    detail: {
+      why:'파란 바다를 멍하니 바라보는 것만으로도 코르티솔이 줄어든다는 연구 결과가 있어요. 아무것도 하지 않아도 괜찮은 곳.',
+      tip:'오후 5시 이후 일몰이 환상적. 비양도가 배경이 되어 사진도 예쁘게 나옴.',
+      recs:[
+        {name:'수월봉 지질공원', desc:'차로 10분. 바람에 깎인 절벽 장관'},
+        {name:'한림 수산물 시장', desc:'저렴하고 신선한 제주 해산물'},
+        {name:'비양도 당일 페리', desc:'작은 섬 당일치기. 조용한 힐링 코스'},
+      ]
+    }
+  },
+  {
+    id:6, region:'제주', category:'맛집', emoji:'🍊', bg:'#fff8ec',
+    tagColor:'#ffd99a', tagText:'#5a3200',
+    name:'제주 올레시장 먹거리',
+    loc:'제주 제주시 이도동',
+    desc:'흑돼지구이, 고기국수, 한치물회 등 제주 로컬 음식이 가득한 재래시장.',
+    tags:['맛집','시장','로컬푸드','가성비'],
+    detail: {
+      why:'새로운 음식 경험은 뇌의 보상 회로를 활성화해요. 시장 구경과 먹거리 탐험이 기분 전환에 최고.',
+      tip:'오전 10시~오후 2시가 가장 활기참. 현금 챙기기 추천.',
+      recs:[
+        {name:'김만복 김밥', desc:'제주 3대 김밥집. 참치 김밥 유명'},
+        {name:'흑돼지 골목 (동문시장 인근)', desc:'저녁 7시 이후 현지인 분위기'},
+        {name:'제주 오메기떡', desc:'전통 떡. 선물용으로도 인기'},
+      ]
+    }
+  },
+  {
+    id:7, region:'강원', category:'자연', emoji:'🏔', bg:'#f0f4ee',
+    tagColor:'#c2d8b8', tagText:'#1a3d0f',
+    name:'설악산 비룡폭포 트레킹',
+    loc:'강원 속초시 설악산로',
+    desc:'울창한 숲길을 1시간 걷다 나타나는 비룡폭포. 자연 속에서 땀 흘리면 머릿속이 맑아져요.',
+    tags:['자연','트레킹','폭포','삼림욕'],
+    detail: {
+      why:'유산소 운동과 자연 노출의 조합은 번아웃 회복에 과학적으로 입증된 방법이에요. 한 걸음씩 걷다 보면 잡생각이 사라져요.',
+      tip:'왕복 2시간. 등산화 필수. 이른 아침 6~8시 방문 시 안개와 숲이 환상적.',
+      recs:[
+        {name:'속초 아바이마을 순대', desc:'속초 명물. 오징어 순대 꼭 먹기'},
+        {name:'속초 영금정', desc:'동해 바다 일출 명소. 트레킹 후 방문'},
+        {name:'척산온천', desc:'트레킹 후 온천욕으로 마무리. 당일 코스 완성'},
+      ]
+    }
+  },
+  {
+    id:8, region:'경주', category:'문화', emoji:'🏺', bg:'#f7f3eb',
+    tagColor:'#ddd0b0', tagText:'#3d2d00',
+    name:'불국사 & 석굴암',
+    loc:'경북 경주시 불국로',
+    desc:'천년 고도의 정적. 고요한 돌계단을 오르며 마음이 저절로 차분해지는 경주의 상징.',
+    tags:['문화유산','사찰','도보','역사'],
+    detail: {
+      why:'공간의 역사성과 장엄함이 개인의 고민을 작게 만들어줘요. 수백 년의 시간 앞에 서면 현재의 스트레스가 상대화됩니다.',
+      tip:'이른 오전 7~9시 방문 시 관광객 적고 분위기 최고. 석굴암은 셔틀버스 이용.',
+      recs:[
+        {name:'황리단길 한식', desc:'경주 로컬 한식 골목. 쌈밥·비빔밥 유명'},
+        {name:'첨성대 야경', desc:'해질 무렵 황금빛 첨성대 촬영 명소'},
+        {name:'교촌마을 교리 김밥', desc:'경주 3대 김밥. 웨이팅 있으나 가치 있음'},
+      ]
+    }
+  },
+  {
+    id:9, region:'전주', category:'맛집', emoji:'🍚', bg:'#f5eeee',
+    tagColor:'#e8c0c0', tagText:'#5a1010',
+    name:'전주 한옥마을 비빔밥 투어',
+    loc:'전북 전주시 완산구',
+    desc:'전주 비빔밥의 원조. 돌솥에서 올라오는 밥의 향기만으로도 기분이 살아나요.',
+    tags:['맛집','전통음식','한옥','한국문화'],
+    detail: {
+      why:'익숙하면서도 특별한 음식은 "집"의 감각을 되살려 줘요. 전주 비빔밥은 한국인의 소울 푸드.',
+      tip:'점심시간(11시~1시) 웨이팅 있음. 오전 10시 전이나 오후 2시 이후 방문 추천.',
+      recs:[
+        {name:'한옥마을 전동성당', desc:'한국에서 가장 아름다운 성당 중 하나. 야경 명소'},
+        {name:'막걸리 골목', desc:'전주 막걸리와 안주 한 상. 저렴하고 풍성'},
+        {name:'오목대 전망대', desc:'한옥마을 전체 뷰. 석양이 특히 아름다움'},
+      ]
+    }
+  },
+  {
+    id:10, region:'여수', category:'야경', emoji:'🌃', bg:'#eceff7',
+    tagColor:'#c0cef0', tagText:'#0f1e5a',
+    name:'여수 밤바다 & 돌산도',
+    loc:'전남 여수시 돌산읍',
+    desc:'버스커버스커의 "여수 밤바다"로 유명한 그 감성. 밤에 더 빛나는 항구 도시.',
+    tags:['야경','바다','낭만','드라이브'],
+    detail: {
+      why:'음악, 야경, 바다 냄새의 삼박자가 감성을 자극해 스트레스를 해소시켜요. 혼자 와도, 같이 와도 좋은 곳.',
+      tip:'여수 엑스포 해양공원 → 돌산공원 → 이순신광장 야경 코스 추천. 저녁 6시 출발.',
+      recs:[
+        {name:'여수 갓김치 & 돌게장', desc:'여수 향토 음식. 밥도둑 보장'},
+        {name:'고소동 벽화마을', desc:'낮에 방문 추천. 바다 뷰 포토스팟'},
+        {name:'향일암 일출', desc:'새벽 5시 방문 가치 있음. 동백꽃과 바다 절경'},
+      ]
+    }
+  },
+];
+
+let currentRegion = '전체';
+let currentMood = 'all';
+
+function filterRegion(region) {
+  currentRegion = region;
+  document.querySelectorAll('.region-tab').forEach(b => {
+    b.classList.toggle('active', b.textContent === region);
+  });
+  renderCards();
+}
+
+function filterMood(mood) {
+  currentMood = mood;
+  document.querySelectorAll('.mood-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('onclick').includes(`'${mood}'`));
+  });
+  renderCards();
+}
+
+function renderCards() {
+  let filtered = PLACES;
+  if (currentRegion !== '전체') filtered = filtered.filter(p => p.region === currentRegion);
+  if (currentMood !== 'all') filtered = filtered.filter(p => p.category === currentMood);
+
+  const grid = document.getElementById('cardsGrid');
+  const label = document.getElementById('sectionLabel');
+  label.textContent = `${currentRegion !== '전체' ? currentRegion + ' ' : ''}${currentMood !== 'all' ? currentMood + ' ' : ''}추천 명소 ${filtered.length}곳`;
+
+  const tips = {
+    '맛집': '🍽 새로운 맛의 경험은 뇌의 보상 회로를 활성화해요. 먹는 게 최고의 힐링!',
+    '자연': '🌿 자연 속에서 20분만 있어도 스트레스 호르몬이 감소해요. 숲으로 가세요.',
+    '카페': '☕ 낯선 카페에서 멍 때리기. 생산적이지 않아도 괜찮아요.',
+    '문화': '🎨 예술 감상은 뇌를 전환시켜요. 작품 앞에서 생각을 내려놓아 보세요.',
+    '야경': '🌙 밤 공기와 빛의 조합은 마음을 차분하게 만들어 줘요.',
+  };
+  const tipBox = document.getElementById('tipBox');
+  if (currentMood !== 'all' && tips[currentMood]) {
+    tipBox.innerHTML = `<strong>💡 ${currentMood} 탈출 팁</strong>${tips[currentMood]}`;
+  } else {
+    tipBox.innerHTML = '<strong>💡 오늘의 탈출 팁</strong>번아웃이 왔을 때 가장 좋은 처방은 "새로운 풍경"이에요. 익숙한 공간을 벗어나 낯선 맛과 장소를 만나면 뇌가 리셋됩니다. 지금 바로 어디든 떠나보세요.';
+  }
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#aaa;font-size:14px;">해당 조건의 명소가 없어요.<br>다른 필터를 선택해보세요.</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(p => `
+    <div class="place-card" onclick="openDetail(${p.id})">
+      <div class="card-thumb" style="background:${p.bg}">
+        ${p.emoji}
+        <span class="card-category-tag" style="background:${p.tagColor};color:${p.tagText}">${p.category}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-name">${p.name}</div>
+        <div class="card-loc"><i class="ti ti-map-pin" style="font-size:12px" aria-hidden="true"></i> ${p.loc}</div>
+        <div class="card-desc">${p.desc}</div>
+        <div class="card-tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openDetail(id) {
+  const p = PLACES.find(x => x.id === id);
+  if (!p) return;
+  const panel = document.getElementById('detailPanel');
+  panel.innerHTML = `
+    <button class="detail-close" onclick="document.getElementById('detailOverlay').classList.remove('open')">×</button>
+    <div class="detail-title">${p.emoji} ${p.name}</div>
+    <div class="detail-sub"><i class="ti ti-map-pin" style="font-size:13px" aria-hidden="true"></i> ${p.loc} · ${p.category}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    <div style="font-size:14px;color:#333;line-height:1.75;padding:12px 0;border-top:0.5px solid #e8e4de;border-bottom:0.5px solid #e8e4de">${p.desc}</div>
+    <div class="detail-section">
+      <h4>왜 번아웃에 좋을까요?</h4>
+      <div style="font-size:13px;color:#444;line-height:1.7;background:#f5f2ed;border-radius:8px;padding:12px 14px">${p.detail.why}</div>
+    </div>
+    <div class="detail-section">
+      <h4>여행 팁</h4>
+      <div class="detail-info-row"><i class="ti ti-bulb" style="font-size:16px" aria-hidden="true"></i><span>${p.detail.tip}</span></div>
+    </div>
+    <div class="detail-section">
+      <h4>주변 추천</h4>
+      <div class="detail-recs">
+        ${p.detail.recs.map(r=>`<div class="rec-item"><strong>${r.name}</strong><span>${r.desc}</span></div>`).join('')}
+      </div>
+    </div>
+    <button style="width:100%;margin-top:1.25rem;padding:12px;background:#1c2b1e;color:#f5f0e8;border:none;border-radius:10px;font-size:14px;font-family:'Noto Sans KR',sans-serif;cursor:pointer;font-weight:500" onclick="sendPrompt('${p.name} 주변 여행 일정 1박 2일로 짜줘')">이 곳 중심으로 코스 짜줘 ↗</button>
+  `;
+  document.getElementById('detailOverlay').classList.add('open');
+}
+
+function closeDetail(e) {
+  if (e.target === document.getElementById('detailOverlay')) {
+    document.getElementById('detailOverlay').classList.remove('open');
+  }
+}
+
+renderCards();
+</script>
